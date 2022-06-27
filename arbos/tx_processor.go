@@ -224,7 +224,7 @@ func (p *TxProcessor) StartTxHook() (endTxNow bool, gasUsed uint64, err error, r
 		if evm.Config.Debug {
 			redeem, err := util.PackArbRetryableTxRedeem(ticketId)
 			if err == nil {
-				tracingInfo.MockCall(redeem, usergas, from, types.ArbRetryableTxAddress, tx.RetryValue)
+				tracingInfo.MockCall(redeem, usergas, from, types.ArbRetryableTxAddress, common.Big0)
 			} else {
 				glog.Error("failed to abi-encode auto-redeem", "err", err)
 			}
