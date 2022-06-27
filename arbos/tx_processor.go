@@ -150,7 +150,7 @@ func (p *TxProcessor) StartTxHook() (endTxNow bool, gasUsed uint64, err error, r
 		if err := transfer(&from, &tx.FeeRefundAddr, excessDeposit); err != nil {
 			return true, 0, err, nil
 		}
-		if err := transfer(&tx.From, &escrow, tx.Value); err != nil {
+		if err := transfer(&tx.From, &escrow, tx.RetryValue); err != nil {
 			return true, 0, err, nil
 		}
 
@@ -163,7 +163,7 @@ func (p *TxProcessor) StartTxHook() (endTxNow bool, gasUsed uint64, err error, r
 			timeout,
 			tx.From,
 			tx.RetryTo,
-			underlyingTx.Value(),
+			tx.RetryValue,
 			tx.Beneficiary,
 			tx.RetryData,
 		)
@@ -224,7 +224,7 @@ func (p *TxProcessor) StartTxHook() (endTxNow bool, gasUsed uint64, err error, r
 		if evm.Config.Debug {
 			redeem, err := util.PackArbRetryableTxRedeem(ticketId)
 			if err == nil {
-				tracingInfo.MockCall(redeem, usergas, from, types.ArbRetryableTxAddress, tx.Value)
+				tracingInfo.MockCall(redeem, usergas, from, types.ArbRetryableTxAddress, tx.RetryValue)
 			} else {
 				glog.Error("failed to abi-encode auto-redeem", "err", err)
 			}
